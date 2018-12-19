@@ -1,0 +1,2 @@
+- pipeline.id: minecraft_logs
+  config.string: "/etc/logstash/pipelines/mc.cfg"

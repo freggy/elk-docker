@@ -23,7 +23,17 @@ services:
         - es
       depends_on:
         - elasticsearch
-
+    logstash:
+      container_name: logstash
+      ports:
+        - "9600:9600"
+      volumes:
+        - "${PWD}/pipelines.yml:/usr/share/logstash/pipeline/pipelines.yml"
+        - "${PWD}/mc.cfg:/etc/logstash/pipelines/mc.cfg"
+      networks:
+        - es
+      depends_on:
+        - elasticsearch
 networks:
   es:
     driver: bridge
