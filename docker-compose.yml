@@ -17,6 +17,7 @@ services:
       image: docker.elastic.co/kibana/kibana:6.5.3
       ports:
         - "5601:5601"
+        - "5044:5044"
       volumes:
         - "${PWD}/kibana.yml:/usr/share/kibana/config/kibana.yml"
       networks:
@@ -25,11 +26,22 @@ services:
         - elasticsearch
     logstash:
       container_name: logstash
+      image:
       ports:
         - "9600:9600"
       volumes:
         - "${PWD}/pipelines.yml:/usr/share/logstash/pipeline/pipelines.yml"
         - "${PWD}/mc.cfg:/etc/logstash/pipelines/mc.cfg"
+      networks:
+        - es
+      depends_on:
+        - elasticsearch
+    filebeat:
+      container_name: filebeat
+      image: docker.elastic.co/beats/filebeat:6.5.4
+      volumes:
+        - "${PWD}/filebeat.yml:/usr/share/filebeat/filebeat.yml"
+        - "/var/log/minecraft:/etc/logs/"
       networks:
         - es
       depends_on:
