@@ -1,51 +1,51 @@
-version: "3"
+version: '3'
 services:
   elasticsearch:
     container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.5.3'
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'
     environment:
-      - "discovery.type=single-node"
+      - discovery.type=single-node
     volumes:
-      - "${PWD}/esdata:/usr/share/elasticsearch/data"
+      - '${PWD}/esdata:/usr/share/elasticsearch/data'
     networks:
       - es
-    kibana:
-      container_name: kibana
-      image: docker.elastic.co/kibana/kibana:6.5.3
-      ports:
-        - "5601:5601"
-        - "5044:5044"
-      volumes:
-        - "${PWD}/kibana.yml:/usr/share/kibana/config/kibana.yml"
-      networks:
-        - es
-      depends_on:
-        - elasticsearch
-    logstash:
-      container_name: logstash
-      image: docker.elastic.co/logstash/logstash:6.5.4
-      ports:
-        - "9600:9600"
-      volumes:
-        - "${PWD}/pipelines.yml:/usr/share/logstash/pipeline/pipelines.yml"
-        - "${PWD}/mc.cfg:/etc/logstash/pipelines/mc.cfg"
-      networks:
-        - es
-      depends_on:
-        - elasticsearch
-    filebeat:
-      container_name: filebeat
-      image: docker.elastic.co/beats/filebeat:6.5.4
-      volumes:
-        - "${PWD}/filebeat.yml:/usr/share/filebeat/filebeat.yml"
-        - "/var/log/minecraft:/etc/logs/"
-      networks:
-        - es
-      depends_on:
-        - elasticsearch
+  kibana:
+    container_name: kibana
+    image: 'docker.elastic.co/kibana/kibana:6.5.3'
+    ports:
+      - '5601:5601'
+      - '5044:5044'
+    volumes:
+      - '${PWD}/kibana.yml:/usr/share/kibana/config/kibana.yml'
+    networks:
+      - es
+    depends_on:
+      - elasticsearch
+  logstash:
+    container_name: logstash
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    ports:
+      - '9600:9600'
+    volumes:
+      - '${PWD}/pipelines.yml:/usr/share/logstash/pipeline/pipelines.yml'
+      - '${PWD}/mc.cfg:/etc/logstash/pipelines/mc.cfg'
+    networks:
+      - es
+    depends_on:
+      - elasticsearch
+  filebeat:
+    container_name: filebeat
+    image: 'docker.elastic.co/beats/filebeat:6.5.4'
+    volumes:
+      - '${PWD}/filebeat.yml:/usr/share/filebeat/filebeat.yml'
+      - '/var/log/minecraft:/etc/logs/'
+    networks:
+      - es
+    depends_on:
+      - elasticsearch
 networks:
   es:
     driver: bridge
